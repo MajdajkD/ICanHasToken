@@ -1,0 +1,7 @@
+{
+    "projectName": "ICH.Solidity",
+    "namespace": "ICH.Solidity.Contracts",
+    "lang": 0,
+    "autoCodeGen": true,
+    "projectPath": "../ICH.Generated"
+}

@@ -1,0 +1,15 @@
+﻿<div class="@Class">
+    <div class="card text-white bg-dark mb-3">
+        <div class="card-header">Current MetaMask settings</div>
+        <div class="card-body">
+            Account: <strong><MetamaskSelectedAccount Class="text-white"></MetamaskSelectedAccount></strong> <br />
+            Network: <strong><MetamaskSelectedNetwork Class="text-white"></MetamaskSelectedNetwork></strong> <br />
+            <MetamaskNetworkChangeButton Class="btn btn-outline-warning font-weight-bold dropdown-toggle mt-2"></MetamaskNetworkChangeButton>
+        </div>
+    </div>
+</div>
+
+@code{
+    [Parameter]
+    public string Class { get; set; } = "";
+}

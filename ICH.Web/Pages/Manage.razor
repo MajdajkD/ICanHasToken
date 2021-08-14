@@ -1,0 +1,48 @@
+﻿@page "/manage"
+@inject ContractStorage _contractStorage;
+
+<InfoBar></InfoBar>
+<h3>Manage</h3>
+
+<table class="table table-dark table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Network</th>
+            <th scope="col">Name</th>
+            <th scope="col">Symbol</th>
+            <th scope="col">Mintable</th>
+            <th scope="col">Burnable</th>
+            <th scope="col">Pausable</th>
+        </tr>
+    </thead>
+    <tbody>
+      @if(contracts != null)
+            foreach (var contract in contracts)
+            {
+                <tr>
+                    <td>@contract.NetworkId</td>
+                    <td>@contract.Name</td>
+                    <td>@contract.Symbol</td>
+                    <td>@contract.IsMintable</td>
+                    <td>@contract.IsBurnable</td>
+                    <td>@contract.IsPpausable</td>
+                </tr>
+            }
+        <tr>
+            <td colspan="6" class="table-active">Create New</td>
+        </tr>
+    </tbody>
+</table>
+
+
+@code {
+    List<ICH.Common.Model.Contract> contracts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        contracts = await _contractStorage.GetContractListAsync();
+        base.OnInitializedAsync();
+    }
+
+
+}

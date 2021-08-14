@@ -1,0 +1,17 @@
+C:\Users\majda\source\repos\ICH\ICH.Logic\bin\Debug\net5.0\ICH.Logic.deps.json
+C:\Users\majda\source\repos\ICH\ICH.Logic\bin\Debug\net5.0\ICH.Logic.dll
+C:\Users\majda\source\repos\ICH\ICH.Logic\bin\Debug\net5.0\ref\ICH.Logic.dll
+C:\Users\majda\source\repos\ICH\ICH.Logic\bin\Debug\net5.0\ICH.Logic.pdb
+C:\Users\majda\source\repos\ICH\ICH.Logic\bin\Debug\net5.0\ICH.Common.dll
+C:\Users\majda\source\repos\ICH\ICH.Logic\bin\Debug\net5.0\ICH.Solidity.dll
+C:\Users\majda\source\repos\ICH\ICH.Logic\bin\Debug\net5.0\ICH.Common.pdb
+C:\Users\majda\source\repos\ICH\ICH.Logic\bin\Debug\net5.0\ICH.Solidity.pdb
+C:\Users\majda\source\repos\ICH\ICH.Logic\obj\Debug\net5.0\ICH.Logic.csproj.AssemblyReference.cache
+C:\Users\majda\source\repos\ICH\ICH.Logic\obj\Debug\net5.0\ICH.Logic.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\majda\source\repos\ICH\ICH.Logic\obj\Debug\net5.0\ICH.Logic.AssemblyInfoInputs.cache
+C:\Users\majda\source\repos\ICH\ICH.Logic\obj\Debug\net5.0\ICH.Logic.AssemblyInfo.cs
+C:\Users\majda\source\repos\ICH\ICH.Logic\obj\Debug\net5.0\ICH.Logic.csproj.CoreCompileInputs.cache
+C:\Users\majda\source\repos\ICH\ICH.Logic\obj\Debug\net5.0\ICH.Logic.csproj.CopyComplete
+C:\Users\majda\source\repos\ICH\ICH.Logic\obj\Debug\net5.0\ICH.Logic.dll
+C:\Users\majda\source\repos\ICH\ICH.Logic\obj\Debug\net5.0\ref\ICH.Logic.dll
+C:\Users\majda\source\repos\ICH\ICH.Logic\obj\Debug\net5.0\ICH.Logic.pdb

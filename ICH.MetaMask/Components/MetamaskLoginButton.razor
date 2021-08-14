@@ -1,0 +1,43 @@
+﻿@inject MetaMaskHostProvider _metamaskHostProvider;
+@inject MetaMaskAuthenticator  _nethereumAuthenticator;
+
+@if (!MetamaskAvailable)
+{
+    <label class="text-warning font-weight-bold">Please Install Metamask</label>
+}
+
+@if (MetamaskAvailable && string.IsNullOrEmpty(SelectedAccount))
+{
+    <button type="button" class="@Class" @onclick="@EnableEthereumAsync">
+        <img src="_content/ICH.MetaMask/img/metamask-logo.png" style="height:24px;" />
+        <span>@Text</span>
+    </button>
+}
+
+@code {
+
+    [Parameter]
+    public string Class { get; set; } = "btn btn-outline-warning btn-lg text-warning font-weight-bold bg-dark";
+    [Parameter]
+    public string Text { get; set; } = "Connect Metamask";
+
+    protected bool MetamaskAvailable { get; set; }
+    protected string SelectedAccount { get; set; }
+    protected string AuthenticatedAccount { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        MetamaskAvailable = await _metamaskHostProvider.CheckProviderAvailabilityAsync();      
+        await base.OnInitializedAsync();
+    }
+
+    protected async Task EnableEthereumAsync()
+    {
+        SelectedAccount = await _metamaskHostProvider.EnableProviderAsync();
+    }
+
+    public async Task AuthenticateAsync()
+    {
+        AuthenticatedAccount = await _nethereumAuthenticator.RequestNewChallengeSignatureAndRecoverAccountAsync();
+    }
+}

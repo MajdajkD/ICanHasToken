@@ -1,0 +1,28 @@
+﻿@inject MetaMaskHostProvider _metamaskHostProvider;
+
+    <button class="@Class dropdown-toggle" type="button" id="networkChangeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        Change Network
+    </button>
+    <ul class="dropdown-menu dropdown-menu-dark text-warning" aria-labelledby="networkChangeDropdown">
+        @foreach (var network in EthereumNetworks.NetworkList)
+        {
+            <li><a class="dropdown-item" @onclick="()=> ChangeChainAsync(network.NetworkId)">@network.NetworkName</a></li>
+        }
+    </ul>
+
+
+@code {
+    [Parameter]
+    public string Class { get; set; } = "btn btn-outline-warning font-weight-bold";
+
+    protected async Task ChangeChainAsync(string chainId)
+    {
+      var network = EthereumNetworks.GetNetworkByChainId(chainId);
+        if (network != null)
+        {
+            var rpcUrl = network.RpcUrl;
+            var success = await _metamaskHostProvider.SwitchChainAsync(chainId, rpcUrl);
+            this.StateHasChanged();
+        }
+    }
+}

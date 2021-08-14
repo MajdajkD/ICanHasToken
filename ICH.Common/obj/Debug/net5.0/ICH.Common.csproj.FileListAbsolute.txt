@@ -1,0 +1,12 @@
+C:\Users\majda\source\repos\ICH\ICH.Common\bin\Debug\net5.0\ICH.Common.deps.json
+C:\Users\majda\source\repos\ICH\ICH.Common\bin\Debug\net5.0\ICH.Common.dll
+C:\Users\majda\source\repos\ICH\ICH.Common\bin\Debug\net5.0\ref\ICH.Common.dll
+C:\Users\majda\source\repos\ICH\ICH.Common\bin\Debug\net5.0\ICH.Common.pdb
+C:\Users\majda\source\repos\ICH\ICH.Common\obj\Debug\net5.0\ICH.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\majda\source\repos\ICH\ICH.Common\obj\Debug\net5.0\ICH.Common.AssemblyInfoInputs.cache
+C:\Users\majda\source\repos\ICH\ICH.Common\obj\Debug\net5.0\ICH.Common.AssemblyInfo.cs
+C:\Users\majda\source\repos\ICH\ICH.Common\obj\Debug\net5.0\ICH.Common.csproj.CoreCompileInputs.cache
+C:\Users\majda\source\repos\ICH\ICH.Common\obj\Debug\net5.0\ICH.Common.dll
+C:\Users\majda\source\repos\ICH\ICH.Common\obj\Debug\net5.0\ref\ICH.Common.dll
+C:\Users\majda\source\repos\ICH\ICH.Common\obj\Debug\net5.0\ICH.Common.pdb
+C:\Users\majda\source\repos\ICH\ICH.Common\obj\Debug\net5.0\ICH.Common.csproj.AssemblyReference.cache

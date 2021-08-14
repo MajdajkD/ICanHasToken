@@ -1,0 +1,30 @@
+﻿@inject MetaMaskHostProvider _metamaskHostProvider;
+
+@if (!string.IsNullOrEmpty(SelectedAccount))
+{
+    <span class="@Class">@SelectedAccount</span>
+}
+else
+{
+    <span class="@Class">No Account Selected!</span>
+}
+
+@code {
+    [Parameter]
+    public string Class { get; set; } = "text-warning font-weight-bold";
+
+    protected string SelectedAccount { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        SelectedAccount = _metamaskHostProvider.SelectedAccount;
+        _metamaskHostProvider.SelectedAccountChanged += SelectedAccountChanged;
+        return base.OnInitializedAsync();
+    }
+
+    private async Task SelectedAccountChanged(string account)
+    {
+        SelectedAccount = account;
+        this.StateHasChanged();
+    }
+}

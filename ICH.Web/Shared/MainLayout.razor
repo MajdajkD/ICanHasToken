@@ -1,0 +1,38 @@
+﻿@inherits LayoutComponentBase
+@inject MetaMaskHostProvider _metamaskHostProvider;
+
+<div class="conatiner-fluid">
+    @if (!MetamaskAvailable || string.IsNullOrEmpty(SelectedAccount))
+    {
+        <LoginScreen></LoginScreen>
+    }
+    else
+    {
+        <div class="d-flex flex-row vh-100 bg-dark bg-gradient">
+            <NavMenu></NavMenu>
+            <div class="d-flex flex-column flex-grow-1 p-3 text-white bg-dark bg-gradient">
+                @Body
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    protected bool MetamaskAvailable { get; set; }
+    protected string SelectedAccount { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _metamaskHostProvider.SelectedAccountChanged += SelectedAccountChanged;
+        MetamaskAvailable = await _metamaskHostProvider.CheckProviderAvailabilityAsync();
+        SelectedAccount = _metamaskHostProvider.SelectedAccount;
+        await base.OnInitializedAsync();
+    }
+
+    private async Task SelectedAccountChanged(string account)
+    {
+        SelectedAccount = account;
+        this.StateHasChanged();
+    }
+
+}

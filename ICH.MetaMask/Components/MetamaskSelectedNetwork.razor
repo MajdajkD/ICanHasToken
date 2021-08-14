@@ -1,0 +1,33 @@
+﻿@inject MetaMaskHostProvider _metamaskHostProvider;
+
+@if (!string.IsNullOrEmpty(SelectedNetwork))
+{
+    <span class="@Class">@SelectedNetworkName</span>
+}
+else
+{
+    <span class="@Class">No Network Selected!</span>
+}
+
+@code {
+    [Parameter]
+    public string Class { get; set; } = "text-warning font-weight-bold";
+
+    string SelectedNetwork { get; set; }
+    string SelectedNetworkName { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        SelectedNetwork = _metamaskHostProvider.SelectedNetwork;
+        SelectedNetworkName = EthereumNetworks.NetworkList.FirstOrDefault(n => n.NetworkId == SelectedNetwork)?.NetworkName ?? $"Unknown network (ChainId: {SelectedNetwork})";
+        _metamaskHostProvider.NetworkChanged += SelectedNetworkChanged;
+        return base.OnInitializedAsync();
+    }
+
+    private async Task SelectedNetworkChanged(string network)
+    {
+        SelectedNetwork = network;
+        SelectedNetworkName = EthereumNetworks.NetworkList.FirstOrDefault(n => n.NetworkId == SelectedNetwork)?.NetworkName ?? $"Unknown network (ChainId: {SelectedNetwork})";
+        this.StateHasChanged();
+    }
+}

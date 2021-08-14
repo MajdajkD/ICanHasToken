@@ -1,0 +1,11 @@
+﻿<div class="@Class">
+    Account: <strong><MetamaskSelectedAccount Class="text-white"></MetamaskSelectedAccount></strong>  , Network: <strong><MetamaskSelectedNetwork Class="text-white"></MetamaskSelectedNetwork></strong>
+    @ChildContent
+</div>
+
+@code {
+    [Parameter]
+    public string Class { get; set; } = "text-warning font-weight-bold alert alert-primary row h5";
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

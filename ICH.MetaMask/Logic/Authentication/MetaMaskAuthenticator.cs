@@ -1,0 +1,47 @@
+﻿using ICH.MetaMask.Logic.Provider;
+using Nethereum.Signer;
+using System;
+using System.Threading.Tasks;
+
+namespace ICH.MetaMask.Logic.Authentication
+{
+  public class MetaMaskAuthenticator
+  {
+    private readonly MetaMaskHostProvider _host;
+
+    public MetaMaskAuthenticator(MetaMaskHostProvider host)
+    {
+      _host = host;
+    }
+
+    private string _currentChallenge;
+    private readonly string _prefix = "Please sign this one time message to Authenticate: ";
+
+    public string GetNewChallenge(string message = null)
+    {
+      if (message == null) message = _prefix;
+      var currentChallenge = DateTime.Now.ToString("O") + "- Challenge";
+      var key = EthECKey.GenerateKey();
+      var currentKey = key.GetPrivateKey(); // random key to sign message
+      var signer = new MessageSigner();
+      _currentChallenge = signer.HashAndSign(currentChallenge, currentKey);
+      return message + _currentChallenge;
+    }
+
+    public async Task<string> RequestNewChallengeSignatureAndRecoverAccountAsync(string message = null)
+    {
+      if (!_host.Available)
+      {
+        throw new Exception("Cannot authenticate user, an Ethereum host is not available");
+      }
+
+      var challenge = GetNewChallenge(message);
+      var signedMessage = await _host.SignMessageAsync(challenge);
+      if (signedMessage != null)
+      {
+        return new EthereumMessageSigner().EncodeUTF8AndEcRecover(challenge, signedMessage);
+      }
+      return null;
+    }
+  }
+}
