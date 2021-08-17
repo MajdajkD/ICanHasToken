@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>ICH.Web</title>
+  <!--<base href="https://majdajkd.github.io/ICanHas/" />-->
   <base href="/" />
   <link href="bootstrap/bootstrap.min.css" rel="stylesheet" />
   <link href="fontawesome/css/all.min.css" rel="stylesheet" />
@@ -15,8 +16,13 @@
 <body style="background-color:black">
   <div id="app">Loading...</div>
   <script src="bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="_content/ICH.MetaMask/metamask-onboarding.bundle.js"></script>
   <script src="_content/ICH.MetaMask/NethereumMetamask.js"></script>
   <script src="_framework/blazor.webassembly.js"></script>
-  <script>navigator.serviceWorker.register('service-worker.js');</script>
+  <script>
+      window.onboarding = new MetaMaskOnboarding();
+  </script>
+  <!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
+
 </body>
 </html>

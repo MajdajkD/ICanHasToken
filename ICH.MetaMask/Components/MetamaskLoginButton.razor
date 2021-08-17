@@ -1,9 +1,13 @@
 ﻿@inject MetaMaskHostProvider _metamaskHostProvider;
 @inject MetaMaskAuthenticator  _nethereumAuthenticator;
+@inject IJSRuntime _jsRuntime;
 
 @if (!MetamaskAvailable)
 {
-    <label class="text-warning font-weight-bold">Please Install Metamask</label>
+    <button type="button" class="@Class" @onclick="@StartOnboarding">
+        <span>Please Install Metamask</span>
+    </button>
+
 }
 
 @if (MetamaskAvailable && string.IsNullOrEmpty(SelectedAccount))
@@ -27,7 +31,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        MetamaskAvailable = await _metamaskHostProvider.CheckProviderAvailabilityAsync();      
+        MetamaskAvailable = await _metamaskHostProvider.CheckProviderAvailabilityAsync();
         await base.OnInitializedAsync();
     }
 
@@ -39,5 +43,10 @@
     public async Task AuthenticateAsync()
     {
         AuthenticatedAccount = await _nethereumAuthenticator.RequestNewChallengeSignatureAndRecoverAccountAsync();
+    }
+
+    public async Task StartOnboarding()
+    {
+        await _jsRuntime.InvokeAsync<string>("onboarding.startOnboarding");
     }
 }
