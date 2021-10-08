@@ -19,7 +19,7 @@ else
     protected override Task OnInitializedAsync()
     {
         SelectedNetwork = _metamaskHostProvider.SelectedNetwork;
-        SelectedNetworkName = EthereumNetworks.NetworkList.FirstOrDefault(n => n.NetworkId == SelectedNetwork)?.NetworkName ?? $"Unknown network (ChainId: {SelectedNetwork})";
+        SelectedNetworkName = EthereumNetworks.GetNetworkNameByChainId(SelectedNetwork);
         _metamaskHostProvider.NetworkChanged += SelectedNetworkChanged;
         return base.OnInitializedAsync();
     }
@@ -27,7 +27,7 @@ else
     private async Task SelectedNetworkChanged(string network)
     {
         SelectedNetwork = network;
-        SelectedNetworkName = EthereumNetworks.NetworkList.FirstOrDefault(n => n.NetworkId == SelectedNetwork)?.NetworkName ?? $"Unknown network (ChainId: {SelectedNetwork})";
+        SelectedNetworkName = SelectedNetworkName = EthereumNetworks.GetNetworkNameByChainId(SelectedNetwork);
         this.StateHasChanged();
     }
 }

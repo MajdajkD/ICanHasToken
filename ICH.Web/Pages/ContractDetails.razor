@@ -1,0 +1,251 @@
+﻿@page "/contractdetails/{networkId}/{contractAddress}/{contractName}/{contractSymbol}/{mint:bool}/{burn:bool}/{pause:bool}"
+@using ICH.Solidity.Contracts.ICHBurnMintPauseERC20
+@using System.ComponentModel.DataAnnotations
+@inject MetaMaskHostProvider _metamaskHostProvider;
+
+<InfoBar></InfoBar>
+<div class="row">
+    <div class="col-md-6">
+        <div class="text-white bg-dark mb-3 p-3 rounded">
+            <h3>Contract Details:</h3>
+            <p><b>Network:</b> @EthereumNetworks.GetNetworkNameByChainId(networkId)</p>
+            <p><b>Address:</b> @contractAddress</p>
+            <p><b>Name:</b> @contractName</p>
+            <p><b>Symbol:</b> @contractSymbol</p>
+            <p><b>Burnable:</b> @burn</p>
+            <p><b>Mintable:</b> @mint</p>
+            <p><b>Pausable:</b> @pause</p>
+            <p><b>Code:</b> <a href="@TokenCodeProvider.GetCode(mint, burn, pause)" target="_blank"> link</a></p>
+            
+        </div>
+        <div class="text-white bg-dark mb-3 p-3 rounded">
+            <h3>Widgets:</h3>
+            <button type="button" class="btn btn-primary btn-large" @onclick="AddToMetamask">Add to metamask</button>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="text-white bg-dark mb-3 p-3 rounded">
+            <h3>Contract Functions:</h3>
+
+            <div class="mb-3 border border-primary p-2">
+                <h4>Get total supply:</h4>
+                <p>Total supply (in Ether): @totalSupply</p>
+                <button class="btn btn-primary" type="button" @onclick="GetTotalSupply">Get totalsupply</button>
+            </div>
+            <div class="mb-3 border border-primary p-2">
+                <h4>Get balance:</h4>
+                <p>Balance (in Ether): @balance</p>
+                <button class="btn btn-primary" type="button" @onclick="GetBalance">Get balance</button>
+            </div>
+            <div class="mb-3 border border-primary p-2">
+                <h4>Transfer:</h4>
+                <EditForm EditContext="@transferEditContext" OnValidSubmit="Transfer">
+                    <DataAnnotationsValidator />
+                    <div class="mb-3">
+                        <label class="form-label">Transfer to</label>
+                        <InputText @bind-Value="transferModel.To" class="form-control" />
+                        <ValidationMessage For="@(() => transferModel.To)" />
+                        <div class="form-text">This will be the receiving address.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Transfer amount</label>
+                        <InputText @bind-Value="transferModel.Amount" class="form-control" />
+                        <ValidationMessage For="@(() => transferModel.Amount)" />
+                        <div class="form-text">This is how much you will transfer (in Ether - aka. 18 decimals).</div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Transfer</button>
+                </EditForm>
+            </div>
+            @if (mint)
+            {
+                <div class="mb-3 border border-primary p-2">
+                    <h4>Mint:</h4>
+                    <EditForm EditContext="@mintEditContext" OnValidSubmit="Mint">
+                        <DataAnnotationsValidator />
+                        <div class="mb-3">
+                            <label class="form-label">Mint to</label>
+                            <InputText @bind-Value="mintModel.To" class="form-control" />
+                            <ValidationMessage For="@(() => mintModel.To)" />
+                            <div class="form-text">This will be the receiving address.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mint amount</label>
+                            <InputText @bind-Value="mintModel.Amount" class="form-control" />
+                            <ValidationMessage For="@(() => mintModel.Amount)" />
+                            <div class="form-text">This is how much tokens will be minted (in Ether - aka. 18 decimals).</div>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Mint</button>
+                    </EditForm>
+                </div>
+            }
+            @if (burn)
+            {
+                <div class="mb-3 border border-primary p-2">
+                    <h4>Burn:</h4>
+                    <EditForm EditContext="@burnEditContext" OnValidSubmit="Burn">
+                        <DataAnnotationsValidator />
+                        <div class="mb-3">
+                            <label class="form-label">Burn amount</label>
+                            <InputText @bind-Value="burnModel.Amount" class="form-control" />
+                            <ValidationMessage For="@(() => burnModel.Amount)" />
+                            <div class="form-text">This is how much tokens will be burned (in Ether - aka. 18 decimals).</div>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Burn</button>
+                    </EditForm>
+                </div>
+            }
+            @if (pause)
+            {
+                <div class="mb-3 border border-primary p-2">
+                    <h4>Pause/UnPause:</h4>
+                    <button class="btn btn-primary" type="button" @onclick="Pause">Pause</button>
+                    <button class="btn btn-primary" type="button" @onclick="UnPause">UnPause</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public string networkId { get; set; }
+    [Parameter]
+    public string contractAddress { get; set; }
+    [Parameter]
+    public string contractName { get; set; }
+    [Parameter]
+    public string contractSymbol { get; set; }
+    [Parameter]
+    public bool mint { get; set; }
+    [Parameter]
+    public bool burn { get; set; }
+    [Parameter]
+    public bool pause { get; set; }
+
+    private ICHBurnMintPauseERC20Service _service;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var web3 = await _metamaskHostProvider.GetWeb3Async();
+        _service = new ICHBurnMintPauseERC20Service(web3, contractAddress);
+
+        transferEditContext = new EditContext(transferModel);
+        mintEditContext = new EditContext(mintModel);
+        burnEditContext = new EditContext(burnModel);
+
+        await base.OnInitializedAsync();
+    }
+
+    private string totalSupply = "";
+    private async Task GetTotalSupply()
+    {
+        await EnforceNetworkChange();
+        var result = await _service.TotalSupplyQueryAsync();
+        var supplyInEther = GetValueInEther(result);
+        totalSupply = supplyInEther.ToString();
+    }
+
+    private string balance = "";
+    private async Task GetBalance()
+    {
+        await EnforceNetworkChange();
+        var result = await _service.BalanceOfQueryAsync(_metamaskHostProvider.SelectedAccount);
+        var balanceInEther = GetValueInEther(result);
+        balance = balanceInEther.ToString();
+    }
+
+
+
+    private EditContext transferEditContext;
+    private TransferModel transferModel = new TransferModel();
+    class TransferModel
+    {
+        [Required]
+        [RegularExpression(@"^[0-9]{1,18}(\.[0-9]{1,18})?$", ErrorMessage = "Amount must between 10^18 and 10^-18 (try shorter number)")]
+        public string Amount { get; set; } = "0";
+
+        [Required]
+        [RegularExpression(@"^0x[a-fA-F0-9]{40}$", ErrorMessage = "To field must be a valid ethereum address.")]
+        public string To { get; set; } = "0x0000000000000000000000000000000000000000";
+    }
+    private async Task Transfer()
+    {
+        await EnforceNetworkChange();
+        var result = await _service.TransferRequestAsync(transferModel.To, GetValueInWei(transferModel.Amount));
+    }
+
+
+
+    private EditContext mintEditContext;
+    private MintModel mintModel = new MintModel();
+    class MintModel
+    {
+        [Required]
+        [RegularExpression(@"^[0-9]{1,18}(\.[0-9]{1,18})?$", ErrorMessage = "Amount must between 10^18 and 10^-18 (try shorter number)")]
+        public string Amount { get; set; } = "0";
+
+        [Required]
+        [RegularExpression(@"^0x[a-fA-F0-9]{40}$", ErrorMessage = "To field must be a valid ethereum address.")]
+        public string To { get; set; } = "0x0000000000000000000000000000000000000000";
+    }
+    private async Task Mint()
+    {
+        await EnforceNetworkChange();
+        var result = await _service.MintRequestAsync(mintModel.To, GetValueInWei(mintModel.Amount));
+    }
+
+
+    private EditContext burnEditContext;
+    private BurnModel burnModel = new BurnModel();
+    class BurnModel
+    {
+        [Required]
+        [RegularExpression(@"^[0-9]{1,18}(\.[0-9]{1,18})?$", ErrorMessage = "Amount must between 10^18 and 10^-18 (try shorter number)")]
+        public string Amount { get; set; } = "0";
+    }
+    private async Task Burn()
+    {
+        await EnforceNetworkChange();
+        var result = await _service.BurnRequestAsync(GetValueInWei(burnModel.Amount));
+    }
+
+
+    private async Task Pause()
+    {
+        await EnforceNetworkChange();
+        var result = await _service.PauseRequestAsync();
+    }
+
+    private async Task UnPause()
+    {
+        await EnforceNetworkChange();
+        var result = await _service.UnpauseRequestAsync();
+    }
+
+
+    private async Task EnforceNetworkChange()
+    {
+        var network = EthereumNetworks.GetNetworkByChainId(networkId);
+        while (_metamaskHostProvider.SelectedNetwork != networkId)
+        {
+            var success = await _metamaskHostProvider.SwitchChainAsync(networkId, network?.RpcUrl);
+        }
+    }
+
+    private BigInteger GetValueInWei(string amount)
+    {
+        var amountDecimal = Nethereum.Util.BigDecimal.Parse(amount) * Nethereum.Util.BigDecimal.Parse("1000000000000000000");
+        return amountDecimal.Floor().Mantissa;
+    }
+
+    private Nethereum.Util.BigDecimal GetValueInEther(BigInteger amount)
+    {
+        return (Nethereum.Util.BigDecimal)amount / Nethereum.Util.BigDecimal.Parse("1000000000000000000");
+    }
+
+    private async Task AddToMetamask()
+    {
+        await _metamaskHostProvider.AddAssetAsync("ERC20", contractAddress, contractSymbol, 18, null);
+    }
+}

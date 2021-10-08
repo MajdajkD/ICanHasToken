@@ -33,6 +33,8 @@
   Request: async (message) => {
     try {
       let parsedMessage = JSON.parse(message);
+      parsedMessage.params[0].gas = null;
+      parsedMessage.params[0].gasPrice = null;
       console.log(parsedMessage);
       const response = await ethereum.request(parsedMessage);
       let rpcResonse = {

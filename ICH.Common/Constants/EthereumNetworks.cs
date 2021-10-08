@@ -17,11 +17,15 @@ namespace ICH.Common.Constants
         new Network("0x38","Binance Smartchain Mainnet","https://testnet-rpc.ilgonwallet.com/","BNB",false),
 
         //new Network("0x696c6774","ILGON Testnet","https://testnet-rpc.ilgonwallet.com/","ILGT",true),
-        new Network("0x61","Binance Testnet","https://data-seed-prebsc-1-s1.binance.org:8545/","BNBT",true),
+        new Network("0x61","Binance Smartchain Testnet","https://data-seed-prebsc-1-s1.binance.org:8545/","BNBT",true),
       }.AsReadOnly();
     }
 
     public static Network GetNetworkByChainId(string chainId)
       => NetworkList.Where(n => n.NetworkId == chainId).FirstOrDefault();
+
+    public static string GetNetworkNameByChainId(string chainId)
+      => NetworkList.Where(n => n.NetworkId == chainId).FirstOrDefault()?.NetworkName
+      ?? $"Unknown network (ChainId: {chainId})";
   }
 }
