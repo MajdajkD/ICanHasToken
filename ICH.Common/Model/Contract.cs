@@ -21,7 +21,7 @@
       string symbol,
       bool isMintable,
       bool isBurnable,
-      bool IsPausable,
+      bool isPausable,
       int decimals = 18,
       string base64Logo = null)
     {
@@ -31,7 +31,7 @@
       Symbol = symbol;
       IsMintable = isMintable;
       IsBurnable = isBurnable;
-      IsPausable = IsPausable;
+      IsPausable = isPausable;
       Decimals = decimals;
       Base64Logo = base64Logo;
     }
