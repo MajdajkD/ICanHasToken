@@ -14,7 +14,6 @@ using ICH.Solidity.Contracts.ICHOnlyMintERC20;
 using ICH.Solidity.Contracts.ICHOnlyMintERC20.ContractDefinition;
 using ICH.Solidity.Contracts.ICHOnlyPauseERC20;
 using ICH.Solidity.Contracts.ICHOnlyPauseERC20.ContractDefinition;
-using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -25,16 +24,13 @@ namespace ICH.Logic
   {
     public static string CommissionAddress { get; set; } = "0x206D19a9F45a94F52Be91F3D26E81De2d85f0706";
 
-      public delegate Task<TransactionReceipt> Deployment(
-        Web3 web3,
-        string name,
-        string symbol,
-        BigInteger initialSupply,
-        string ownerAddress,
-        BigInteger commission
-        );
-
-    public static Deployment Deploy(
+    public static async Task<string> Deploy(
+      Web3 web3,
+      string name,
+      string symbol,
+      BigInteger initialSupply,
+      string ownerAddress,
+      BigInteger commission,
       bool isMintable,
       bool isBurnable,
       bool isPausable
@@ -44,35 +40,63 @@ namespace ICH.Logic
       {
         if (isBurnable)
         {
-          return isPausable
-            ? DeployBurnMintPause
-            : DeployBurnMint;
+          if (isPausable)
+          {
+            //MintBurnPause
+            return await DeployBurnMintPause(web3, name, symbol, initialSupply, ownerAddress, commission);
+          }
+          else
+          {
+            //MintBurn
+            return await DeployBurnMint(web3, name, symbol, initialSupply, ownerAddress, commission);
+          }
         }
         else
         {
-          return isPausable
-            ? DeployMintPause
-            : DeployOnlyMint;
+          if (isPausable)
+          {
+            //MintPause
+            return await DeployMintPause(web3, name, symbol, initialSupply, ownerAddress, commission);
+          }
+          else
+          {
+            //OnlyMint
+            return await DeployOnlyMint(web3, name, symbol, initialSupply, ownerAddress, commission);
+          }
         }
       }
       else
       {
         if (isBurnable)
         {
-          return isPausable
-            ? DeployBurnPause
-            : DeployOnlyBurn;
+          if (isPausable)
+          {
+            //BurnPause
+            return await DeployBurnPause(web3, name, symbol, initialSupply, ownerAddress, commission);
+          }
+          else
+          {
+            //OnlyBurn
+            return await DeployOnlyBurn(web3, name, symbol, initialSupply, ownerAddress, commission);
+          }
         }
         else
         {
-          return isPausable
-            ? DeployOnlyPause
-            : DeployBase;
+          if (isPausable)
+          {
+            //OnlyPause
+            return await DeployOnlyPause(web3, name, symbol, initialSupply, ownerAddress, commission);
+          }
+          else
+          {
+            //Base
+            return await DeployBase(web3, name, symbol, initialSupply, ownerAddress, commission);
+          }
         }
       }
     }
 
-    private static Task<TransactionReceipt> DeployBase(
+    private static async Task<string> DeployBase(
       Web3 web3,
       string name,
       string symbol,
@@ -89,10 +113,11 @@ namespace ICH.Logic
         Owner = ownerAddress,
         AmountToSend = commission
       };
-      return ICHBaseERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      var receipt = await ICHBaseERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      return receipt.ContractAddress;
     }
 
-    private static Task<TransactionReceipt> DeployOnlyPause(
+    private static async Task<string> DeployOnlyPause(
       Web3 web3,
       string name,
       string symbol,
@@ -109,10 +134,11 @@ namespace ICH.Logic
         Owner = ownerAddress,
         AmountToSend = commission
       };
-      return ICHOnlyPauseERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      var receipt = await ICHOnlyPauseERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      return receipt.ContractAddress;
     }
 
-    private static Task<TransactionReceipt> DeployOnlyBurn(
+    private static async Task<string> DeployOnlyBurn(
       Web3 web3,
       string name,
       string symbol,
@@ -129,10 +155,11 @@ namespace ICH.Logic
         Owner = ownerAddress,
         AmountToSend = commission
       };
-      return ICHOnlyBurnERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      var receipt = await ICHOnlyBurnERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      return receipt.ContractAddress;
     }
 
-    private static Task<TransactionReceipt> DeployBurnPause(
+    private static async Task<string> DeployBurnPause(
       Web3 web3,
       string name,
       string symbol,
@@ -149,10 +176,11 @@ namespace ICH.Logic
         Owner = ownerAddress,
         AmountToSend = commission
       };
-      return ICHBurnPauseERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      var receipt = await ICHBurnPauseERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      return receipt.ContractAddress;
     }
 
-    private static Task<TransactionReceipt> DeployOnlyMint(
+    private static async Task<string> DeployOnlyMint(
       Web3 web3,
       string name,
       string symbol,
@@ -169,10 +197,11 @@ namespace ICH.Logic
         Owner = ownerAddress,
         AmountToSend = commission
       };
-      return ICHOnlyMintERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      var receipt = await ICHOnlyMintERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      return receipt.ContractAddress;
     }
 
-    private static Task<TransactionReceipt> DeployMintPause(
+    private static async Task<string> DeployMintPause(
       Web3 web3,
       string name,
       string symbol,
@@ -189,10 +218,11 @@ namespace ICH.Logic
         Owner = ownerAddress,
         AmountToSend = commission
       };
-      return ICHMintPauseERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      var receipt = await ICHMintPauseERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      return receipt.ContractAddress;
     }
 
-    private static Task<TransactionReceipt> DeployBurnMint(
+    private static async Task<string> DeployBurnMint(
       Web3 web3,
       string name,
       string symbol,
@@ -209,10 +239,11 @@ namespace ICH.Logic
         Owner = ownerAddress,
         AmountToSend = commission
       };
-      return ICHBurnMintERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      var receipt = await ICHBurnMintERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      return receipt.ContractAddress;
     }
 
-    private static Task<TransactionReceipt> DeployBurnMintPause(
+    private static async Task<string> DeployBurnMintPause(
       Web3 web3,
       string name,
       string symbol,
@@ -229,7 +260,8 @@ namespace ICH.Logic
         Owner = ownerAddress,
         AmountToSend = commission
       };
-      return ICHBurnMintPauseERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      var receipt = await ICHBurnMintPauseERC20Service.DeployContractAndWaitForReceiptAsync(web3, deployment);
+      return receipt.ContractAddress;
     }
   }
 }
