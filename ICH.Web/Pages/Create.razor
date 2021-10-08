@@ -128,7 +128,7 @@
         var supplyDecimal = Nethereum.Util.BigDecimal.Parse(model.initialSupply) * Nethereum.Util.BigDecimal.Parse("1000000000000000000");
         var supplyInteger = supplyDecimal.Floor().Mantissa;
 
-        contractAddress = await TokenDeployManager.Deploy(metaMaskWeb3, model.tokenName, model.tokenSymbol, supplyInteger, currentAddress, commissionInteger, model.mintable, model.burnable, model.pausable);
+        contractAddress = (await TokenDeployManager.Deploy(model.mintable, model.burnable, model.pausable)(metaMaskWeb3, model.tokenName, model.tokenSymbol, supplyInteger, currentAddress, commissionInteger)).ContractAddress;
         await _contractStorage.AddContractAsync(new Common.Model.Contract(
           _metamaskHostProvider.SelectedNetwork,
           contractAddress,
