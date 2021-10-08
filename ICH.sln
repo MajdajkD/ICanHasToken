@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICH.Web", "ICH.Web\ICH.Web.csproj", "{104224D4-37F3-4658-9536-D9249A484BB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICH.Web", "ICH.Web\ICH.Web.csproj", "{104224D4-37F3-4658-9536-D9249A484BB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICH.MetaMask", "ICH.MetaMask\ICH.MetaMask.csproj", "{94C3EE57-6EBE-4304-B813-A66FF2CAD002}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICH.MetaMask", "ICH.MetaMask\ICH.MetaMask.csproj", "{94C3EE57-6EBE-4304-B813-A66FF2CAD002}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICH.Common", "ICH.Common\ICH.Common.csproj", "{D9DC9EA3-9CEF-448F-9470-EE81EBE8A7FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICH.Common", "ICH.Common\ICH.Common.csproj", "{D9DC9EA3-9CEF-448F-9470-EE81EBE8A7FE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICH.Solidity", "ICH.Generated\ICH.Solidity.csproj", "{064C43C9-D30A-44EC-AB5C-C50A80EF668C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICH.Logic", "ICH.Logic\ICH.Logic.csproj", "{679332BE-62E6-4496-A26C-C1697C8DFD18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICH.Logic", "ICH.Logic\ICH.Logic.csproj", "{679332BE-62E6-4496-A26C-C1697C8DFD18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICH.Storage", "ICH.Storage\ICH.Storage.csproj", "{096FCBBB-7251-47D9-8E2B-C53EDA253ACE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICH.Storage", "ICH.Storage\ICH.Storage.csproj", "{096FCBBB-7251-47D9-8E2B-C53EDA253ACE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

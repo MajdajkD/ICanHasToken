@@ -1,28 +1,35 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>ICH.Web</title>
-  <!--<base href="https://majdajkd.github.io/ICanHas/" />-->
+  <meta name="google-site-verification" content="wMRSDU0EelUubLk_asU4-sHuTHpVgO63DcOCjxsrrfY" />
+  <meta name="description" content="'Pay-What-You-Want' ERC20 Token Creator / ERC20 Token Generator. You can create an Ethereum ERC20 or Binance BEP20 or any ERC20 compatible token, deploy it and manage it in minutes. This ERC20 Token Creator is the cheapest on the market, since you pay as little as you want.">
+  <meta property="og:description" content="'Pay-What-You-Want' ERC20 Token Creator / ERC20 Token Generator. You can create an Ethereum ERC20 or Binance BEP20 or any ERC20 compatible token, deploy it and manage it in minutes. This ERC20 Token Creator is the cheapest on the market, since you pay as little as you want.">
+  <meta property="og:image:alt" content="Pay-What-You-Want ERC20 and BEP20 Token Creator and Generator with management features.">
+  <meta property="og:site_name" content="I Can Haz Token? | Pay-What-You-Want ERC20 and BEP20 Token Creator and Generator">
+  <title>I Can Haz Token? ERC20 and BEP20 Token Creator</title>
   <base href="/" />
   <link href="bootstrap/bootstrap.min.css" rel="stylesheet" />
   <link href="fontawesome/css/all.min.css" rel="stylesheet" />
+  <link href="app.css" rel="stylesheet" />
   <link href="manifest.json" rel="manifest" />
   <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
 </head>
-
 <body style="background-color:black">
-  <div id="app">Loading...</div>
+  <div id="app">
+    <div class="loadercontainer">
+      <span class="loader"></span>
+    </div>
+  </div>
+  <script>
+    window.onboarding = new MetaMaskOnboarding();
+  </script>
+  <script src="FileDownloader.js"></script>
   <script src="bootstrap/bootstrap.bundle.min.js"></script>
   <script src="_content/ICH.MetaMask/metamask-onboarding.bundle.js"></script>
   <script src="_content/ICH.MetaMask/NethereumMetamask.js"></script>
   <script src="_framework/blazor.webassembly.js"></script>
-  <script>
-      window.onboarding = new MetaMaskOnboarding();
-  </script>
-  <!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
-
+  <script>navigator.serviceWorker.register('service-worker.js');</script>
 </body>
 </html>

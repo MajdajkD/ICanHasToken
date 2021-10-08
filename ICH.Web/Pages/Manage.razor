@@ -1,39 +1,48 @@
 ﻿@page "/manage"
 @inject ContractStorage _contractStorage;
+@using Microsoft.JSInterop
+@inject IJSRuntime jsRuntime;
 
 <InfoBar></InfoBar>
-<h3>Manage</h3>
-
-<table class="table table-dark table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Network</th>
-            <th scope="col">Name</th>
-            <th scope="col">Symbol</th>
-            <th scope="col">Mintable</th>
-            <th scope="col">Burnable</th>
-            <th scope="col">Pausable</th>
-        </tr>
-    </thead>
-    <tbody>
-      @if(contracts != null)
-            foreach (var contract in contracts)
-            {
-                <tr>
-                    <td>@contract.NetworkId</td>
-                    <td>@contract.Name</td>
-                    <td>@contract.Symbol</td>
-                    <td>@contract.IsMintable</td>
-                    <td>@contract.IsBurnable</td>
-                    <td>@contract.IsPpausable</td>
-                </tr>
-            }
-        <tr>
-            <td colspan="6" class="table-active">Create New</td>
-        </tr>
-    </tbody>
-</table>
-
+<div class="text-white bg-dark mb-3 p-3 rounded">
+    <h3>Manage</h3>
+    <p class="text-danger">
+        Note: These records are stored in your browser localstorage. If you clean your browser, it will empty this list.
+        You can preserve the functionality by saving the url of the individual token management pages or exporting this list.
+    </p>
+    <button type="button" class="btn btn-secondary" @onclick="ExportList">Export list</button>
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Network</th>
+                <th scope="col">Name</th>
+                <th scope="col">Symbol</th>
+                <th scope="col">Mintable</th>
+                <th scope="col">Burnable</th>
+                <th scope="col">Pausable</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (contracts != null)
+                foreach (var contract in contracts)
+                {
+                    <tr>
+                        <td>@(EthereumNetworks.GetNetworkNameByChainId(contract.NetworkId))</td>
+                        <td>@contract.Name</td>
+                        <td>@contract.Symbol</td>
+                        <td>@contract.IsMintable</td>
+                        <td>@contract.IsBurnable</td>
+                        <td>@contract.IsPausable</td>
+                        <td><a class="btn btn-primary" href="/contractdetails/@contract.NetworkId/@contract.Address/@contract.Name/@contract.Symbol/@contract.IsMintable/@contract.IsBurnable/@contract.IsPausable">Manage</a></td>
+                    </tr>
+                }
+            <tr>
+                <td colspan="7" class="table-active text-center" onclick="window.location = '/'" style="cursor: pointer">Create New</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 @code {
     List<ICH.Common.Model.Contract> contracts;
@@ -41,8 +50,13 @@
     protected override async Task OnInitializedAsync()
     {
         contracts = await _contractStorage.GetContractListAsync();
-        base.OnInitializedAsync();
+        await base.OnInitializedAsync();
     }
 
+    public async void ExportList()
+    {
+        var Content = string.Join('\n', contracts.Select(c => $"{c.NetworkId},{c.Name},{c.Symbol},{c.IsMintable},{c.IsBurnable},{c.IsPausable},https://icanhaztoken.net/contractdetails/{c.NetworkId}/{c.Address}/{c.Name}/{c.Symbol}/{c.IsMintable}/{c.IsBurnable}/{c.IsPausable}"));
+        await jsRuntime.InvokeAsync<object>("FileDownloader.SaveCsv", "Contracts.csv", Content);
+    }
 
 }

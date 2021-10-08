@@ -25,11 +25,22 @@ namespace ICH.MetaMask.Logic.Nethereum
         RpcRequest request,
         string route = null)
     {
+
+      //Console.WriteLine("RequestParamType: " + request.RawParameters[0].GetType().Name);
+
+      if (request.RawParameters[0] is CallInput input)
+      {
+        input.From = GetSelectedAccount();
+        request.RawParameters[0] = input;
+      }
+
+
       if (request.Method == "eth_sendTransaction")
       {
         var transaction = (TransactionInput)request.RawParameters[0];
         transaction.From = _metamaskHostProvider.SelectedAccount;
         request.RawParameters[0] = transaction;
+
         var response = await _metamaskInterop.SendAsync(
           new MetamaskRpcRequestMessage(
             request.Id,
@@ -41,7 +52,12 @@ namespace ICH.MetaMask.Logic.Nethereum
       else
       {
         var response = await _metamaskInterop.SendAsync(
-          new RpcRequestMessage(
+        //new MetamaskRpcRequestMessage(
+        //  request.Id,
+        //  request.Method,
+        //  GetSelectedAccount(),
+        //  request.RawParameters));
+        new RpcRequestMessage(
             request.Id,
             request.Method,
             request.RawParameters));
