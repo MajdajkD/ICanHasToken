@@ -5,133 +5,171 @@
 
 <InfoBar></InfoBar>
 <div class="row">
-    <div class="col-md-6">
-        <h3>Create Token</h3>
-        <EditForm EditContext="@editContext" OnValidSubmit="Deploy">
-            <DataAnnotationsValidator />
+  <div class="col-md-6">
+    <div class="text-white bg-dark mb-3 p-3 rounded">
+      <h3>Create Token</h3>
+      <EditForm EditContext="@editContext" OnValidSubmit="Deploy">
+        <DataAnnotationsValidator />
 
-            <div class="mb-3">
-                <label for="tokenName" class="form-label">Token Name</label>
-                <InputText @bind-Value="model.tokenName" class="form-control" />
-                <ValidationMessage For="@(() => model.tokenName)" />
-                <div id="tokenNameHelp" class="form-text">This will be the full name of your token.</div>
-            </div>
-            <div class="mb-3">
-                <label for="tokenSymbol" class="form-label">Token Symbol</label>
-                <InputText @bind-Value="model.tokenSymbol" class="form-control" />
-                <ValidationMessage For="@(() => model.tokenSymbol)" />
-                <div id="tokenSymbolHelp" class="form-text">This will be the short name (1-6 characters) of your token. </div>
-            </div>
+        <div class="mb-3">
+          <label for="tokenName" class="form-label">Token Name</label>
+          <InputText @bind-Value="model.tokenName" class="form-control" />
+          <ValidationMessage For="@(() => model.tokenName)" />
+          <div id="tokenNameHelp" class="form-text">This will be the full name of your token.</div>
+        </div>
+        <div class="mb-3">
+          <label for="tokenSymbol" class="form-label">Token Symbol</label>
+          <InputText @bind-Value="model.tokenSymbol" class="form-control" />
+          <ValidationMessage For="@(() => model.tokenSymbol)" />
+          <div id="tokenSymbolHelp" class="form-text">This will be the short name (1-6 characters) of your token. </div>
+        </div>
 
-            <div class="mb-3 form-check">
-                <InputCheckbox @bind-Value="model.burnable" id="burnable" class="form-check-input" />
-                <label class="form-check-label" for="burnable">Token is burnable</label>
-                <div class="form-text">Check this, if you want your token holders to be able to burn their tokens.</div>
-            </div>
-            <div class="mb-3 form-check">
-                <InputCheckbox @bind-Value="model.mintable" id="mintable" class="form-check-input" />
-                <label class="form-check-label" for="mintable">Token is mintable</label>
-                <div class="form-text">Check this, if you want to be able to mint tokens for others or yourself.</div>
-            </div>
-            <div class="mb-3 form-check">
-                <InputCheckbox @bind-Value="model.pausable" id="pausable" class="form-check-input" />
-                <label class="form-check-label" for="pausable">Token is pausable</label>
-                <div class="form-text">Check this, if you want to be able to pause/resume every transaction of the contract.</div>
-            </div>
+        <div class="mb-3 form-check">
+          <InputCheckbox @bind-Value="model.burnable" id="burnable" class="form-check-input" />
+          <label class="form-check-label" for="burnable">Token is burnable</label>
+          <div class="form-text">Check this, if you want your token holders to be able to burn their tokens.</div>
+        </div>
+        <div class="mb-3 form-check">
+          <InputCheckbox @bind-Value="model.mintable" id="mintable" class="form-check-input" />
+          <label class="form-check-label" for="mintable">Token is mintable</label>
+          <div class="form-text">Check this, if you want to be able to mint tokens for others or yourself.</div>
+        </div>
+        <div class="mb-3 form-check">
+          <InputCheckbox @bind-Value="model.pausable" id="pausable" class="form-check-input" />
+          <label class="form-check-label" for="pausable">Token is pausable</label>
+          <div class="form-text">Check this, if you want to be able to pause/resume every transaction of the contract.</div>
+        </div>
 
-            <div class="mb-3">
-                <label for="tokenSupply" class="form-label">Initial Token Supply</label>
-                <InputText @bind-Value="model.initialSupply" class="form-control" />
-                <ValidationMessage For="@(() => model.initialSupply)" />
-                <div id="tokenSupplylHelp" class="form-text">This will be the initial supply of your token (in Ether - aka. 18 decimals).</div>
-            </div>
+        <div class="mb-3">
+          <label for="tokenSupply" class="form-label">Initial Token Supply</label>
+          <InputText @bind-Value="model.initialSupply" class="form-control" />
+          <ValidationMessage For="@(() => model.initialSupply)" />
+          <div id="tokenSupplylHelp" class="form-text">This will be the initial supply of your token (in Ether - aka. 18 decimals).</div>
+        </div>
 
-            <div class="mb-3">
-                <label for="commission" class="form-label">Commission</label>
-                <InputText @bind-Value="model.commission" class="form-control" />
-                <ValidationMessage For="@(() => model.commission)" />
-                <div id="commissionHelp" class="form-text">Typical fee on other sites are 0.1 to 0.8 Eth, which is way too much in our opinion, feel free to modify this value (in Ether - aka. 18 decimals, minimum: 0.000000000000000001).</div>
-            </div>
-            <button class="btn btn-primary btn-lg" type="submit">Deploy Contract</button>
-        </EditForm>
+        <div class="mb-3">
+          <label for="commission" class="form-label">Commission (Editable!)</label>
+          <InputText @bind-Value="model.commission" class="form-control" />
+          <ValidationMessage For="@(() => model.commission)" />
+          <div id="commissionHelp" class="form-text">Typical fee on other sites are 0.1 to 0.8 Eth, which is way too much in our opinion, feel free to modify this value (in Ether - aka. 18 decimals, minimum: 0.000000000000000001).</div>
+        </div>
+        <button class="btn btn-primary btn-lg" type="submit">Deploy Contract</button>
+      </EditForm>
     </div>
-    <div class="col-md-6">
-        <h3>Or choose one of the presets:</h3>
+  </div>
+  <div class="col-md-6">
+    <div class="text-white bg-dark mb-3 p-3 rounded">
+      <h3>Deployed contract Details:</h3>
+      <p><b>Name:</b> @model.tokenName</p>
+      <p><b>Symbol:</b> @model.tokenSymbol</p>
+      <p><b>Burnable:</b> @model.burnable</p>
+      <p><b>Mintable:</b> @model.mintable</p>
+      <p><b>Pausable:</b> @model.pausable</p>
+      <br />
+      <p><b>Compiler version:</b> v0.8.6+commit.11564f7e</p>
+      <p><b>Optimization:</b> Yes, with 200 runs</p>
+      <p><b>Contract address (valid after deployment):</b> @contractAddress</p>
+      <p>
+        <b>Contract solidity code (valid after deployment): </b> @if (contractCode != "#")
+        {
+          <a href="@contractCode" target="_blank">link</a>
+        }
+      </p>
+      @if (contractAddress != null)
+      {
+        <p>
+          <button type="button" class="btn btn-primary btn-large" @onclick="AddToMetamask">Add to metamask</button>
+        </p>
+      }
     </div>
+    <div class="text-white bg-dark mb-3 p-3 rounded">
+      <p>You can safely (and for free) test contracts on the BSC Testnet and verify the code on their explorer.</p>
+      <p>Steps:</p>
+      <p>1, Get some test coins from <a href="https://testnet.binance.org/faucet-smart" target="_blank"><i>https://testnet.binance.org/faucet-smart</i></a></p>
+      <p>2, Select the Binance Smartchain Testnet in metamask, or in the dropdown on top.</p>
+      <p>3, Customize your contract and deploy.</p>
+      <p>4, Visit <a href="https://testnet.bscscan.com" target="_blank"><i>https://testnet.bscscan.com</i></a>  and search for your contract address</p>
+      <p>(It will show after deployment in the details above)</p>
+      <p>5, Select "Contract" tab and click on "Verify and Publish"</p>
+      <p>6, Select "Single file", "v0.8.6", "MIT", and click continue</p>
+      <p>7, Select "Yes" for Optimization, and copy the contract code (which you find above after deployment) to the code box</p>
+      <p>8, Click "Verify and Publish" (probably after spending some time with the captcha)</p>
+      <p>9, Your contract is verified :)</p>
+      <p>(10, Repeat on other networks)</p>
+      <br /><br />
+      <p>PS.: I will put some educational content on the page in the future, until then:</p>
+      <p>If you are not sure what you are doing, please do some research!</p>
+      <br /><br />
+      <p>(PS.PS: Gas calculation problems are fixed, working on feature/ui, so you can call mint/burn/etc. on your contracts.)</p>
+    </div>
+  </div>
 </div>
 
 
-
-@if (!string.IsNullOrEmpty(contractAddress))
-{
-    <text>Contract Address: @contractAddress</text>
-}
-
-
-<style>
-    .validation-message {
-        color: #f00 !important
-    }</style>
-
-
 @code {
-    string contractAddress { get; set; }
-    private EditContext editContext;
-    TokenFormModel model = new TokenFormModel();
+  string contractAddress { get; set; }
+  string contractCode { get; set; } = "#";
+  private EditContext editContext;
+  TokenFormModel model = new TokenFormModel();
 
-    protected override void OnInitialized()
-    {
-        editContext = new EditContext(model);
-    }
+  protected override void OnInitialized()
+  {
+    editContext = new EditContext(model);
+  }
 
-    protected async Task Deploy()
-    {
-        var currentAddress = await _metamaskHostProvider.GetProviderSelectedAccountAsync();
-        var metaMaskWeb3 = await _metamaskHostProvider.GetWeb3Async();
+  protected async Task Deploy()
+  {
+    var currentAddress = await _metamaskHostProvider.GetProviderSelectedAccountAsync();
+    var metaMaskWeb3 = await _metamaskHostProvider.GetWeb3Async();
 
-        var commissionDecimal = Nethereum.Util.BigDecimal.Parse(model.commission) * Nethereum.Util.BigDecimal.Parse("1000000000000000000");
-        var commissionInteger = commissionDecimal.Floor().Mantissa;
+    var commissionDecimal = Nethereum.Util.BigDecimal.Parse(model.commission) * Nethereum.Util.BigDecimal.Parse("1000000000000000000");
+    var commissionInteger = commissionDecimal.Floor().Mantissa;
 
-        var supplyDecimal = Nethereum.Util.BigDecimal.Parse(model.initialSupply) * Nethereum.Util.BigDecimal.Parse("1000000000000000000");
-        var supplyInteger = supplyDecimal.Floor().Mantissa;
+    var supplyDecimal = Nethereum.Util.BigDecimal.Parse(model.initialSupply) * Nethereum.Util.BigDecimal.Parse("1000000000000000000");
+    var supplyInteger = supplyDecimal.Floor().Mantissa;
 
-        contractAddress = await TokenDeployManager.Deploy(metaMaskWeb3, model.tokenName, model.tokenSymbol, supplyInteger, currentAddress, commissionInteger, model.mintable, model.burnable, model.pausable);
-        await _contractStorage.AddContractAsync(new Common.Model.Contract(
-          _metamaskHostProvider.SelectedNetwork,
-          contractAddress,
-          model.tokenName,
-          model.tokenSymbol,
-          model.mintable,
-          model.burnable,
-          model.pausable
-          // decimals, base64 image
-        ));
-    }
+    contractAddress = await TokenDeployManager.Deploy(metaMaskWeb3, model.tokenName, model.tokenSymbol, supplyInteger, currentAddress, commissionInteger, model.mintable, model.burnable, model.pausable);
+    await _contractStorage.AddContractAsync(new Common.Model.Contract(
+      _metamaskHostProvider.SelectedNetwork,
+      contractAddress,
+      model.tokenName,
+      model.tokenSymbol,
+      model.mintable,
+      model.burnable,
+      model.pausable
+    // decimals, base64 image
+    ));
+    contractCode = TokenCodeProvider.GetCode(model.mintable, model.burnable, model.pausable);
+  }
 
 
-    class TokenFormModel
-    {
-        [Required]
-        [MinLength(1, ErrorMessage = "Token Name must be at least 1 character")]
-        public string tokenName { get; set; }
+  class TokenFormModel
+  {
+    [Required]
+    [MinLength(1, ErrorMessage = "Token Name must be at least 1 character")]
+    public string tokenName { get; set; }
 
-        [Required]
-        [MinLength(1, ErrorMessage = "Token Symbol must be at least 1 character")]
-        [MaxLength(6, ErrorMessage = "Token Symbol must be max 6 characters long")]
-        [RegularExpression(@"^[A-Za-z0-9]{1,6}$", ErrorMessage = "Token Symbol must be 1-6 long and can contain letters and numbers")]
-        public string tokenSymbol { get; set; }
+    [Required]
+    [MinLength(1, ErrorMessage = "Token Symbol must be at least 1 character")]
+    [MaxLength(6, ErrorMessage = "Token Symbol must be max 6 characters long")]
+    [RegularExpression(@"^[A-Za-z0-9]{1,6}$", ErrorMessage = "Token Symbol must be 1-6 long and can contain letters and numbers")]
+    public string tokenSymbol { get; set; }
 
-        public bool mintable { get; set; }
-        public bool burnable { get; set; }
-        public bool pausable { get; set; }
+    public bool mintable { get; set; }
+    public bool burnable { get; set; }
+    public bool pausable { get; set; }
 
-        [Required]
-        [RegularExpression(@"^[0-9]{1,18}(\.[0-9]{0,18})?$", ErrorMessage = "Initial supply must between 10^18 and 10^-18 (try shorter number)")]
-        public string initialSupply { get; set; } = "10000";
+    [Required]
+    [RegularExpression(@"^[0-9]{1,18}(\.[0-9]{1,18})?$", ErrorMessage = "Initial supply must between 10^18 and 10^-18 (try shorter number)")]
+    public string initialSupply { get; set; } = "10000";
 
-        [Required]
-        [RegularExpression(@"^[0-9]{1,18}(\.[0-9]{0,18})?$", ErrorMessage = "Commission fee must between 10^18 and 10^-18 (try shorter number)")]
-        public string commission { get; set; } = "0.05";
-    }
+    [Required]
+    [RegularExpression(@"^[0-9]{1,18}(\.[0-9]{1,18})?$", ErrorMessage = "Commission fee must between 10^18 and 10^-18 (try shorter number)")]
+    public string commission { get; set; } = "0.05";
+  }
 
+  private async Task AddToMetamask()
+  {
+    await _metamaskHostProvider.AddAssetAsync("ERC20", contractAddress, model.tokenSymbol, 18, null);
+  }
 }
